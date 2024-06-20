@@ -1,68 +1,96 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Interfaces\UserTaskInterface;
 use App\Models\UserTaskList;
+use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * Summary of UserTaskRepositories
+ */
 class UserTaskRepositories extends BaseRepositories implements UserTaskInterface
 {
-    protected $model;
+    /**
+     * Summary of model
+     * @var
+     */
+    protected  $model;
+
+    /**
+     * Summary of __construct
+     * @param \App\Models\UserTaskList $model
+     */
     public function __construct(UserTaskList $model)
     {
         $this->model = $model;
     }
 
     /**
-     * Summary of createTask
+     * Create a new task.
+     *
+     * @param array $data
+     * @return UserTaskList
      */
-    public function createTask(array $data)
+    public function createTask(array $data): UserTaskList
     {
         return $this->model->create($data);
     }
 
     /**
-     * Summary of getAllTasksByUserId
+     * Get all tasks by user ID.
+     *
+     * @param int $userId
+     * @return Collection
      */
-    public function getAllTasksByUserId(int $userId)
+    public function getAllTasksByUserId(int $userId): Collection
     {
         return $this->model->where('user_id', $userId)->get();
     }
 
     /**
-     * Summary of findTaskById
+     * Find a task by UUID.
+     *
+     * @param string $uuid
+     * @return UserTaskList
      */
-    public function findTaskByUuid(string $uuid)
+    public function findTaskByUuid(string $uuid): UserTaskList
     {
         return $this->model->where('uuid', $uuid)->firstOrFail();
     }
 
-
     /**
-     * Summary of updateTask
+     * Update a task by UUID.
+     *
+     * @param string $uuid
+     * @param array $data
+     * @return bool
      */
-    public function updateTask(string $id, array $data)
+    public function updateTaskByUuid(string $uuid, array $data): bool
     {
-        return $this->model->find($id)->update($data);
+        return $this->model->where('uuid', $uuid)->update($data);
     }
 
     /**
-     * Summary of deleteTask
+     * Delete a task by UUID.
+     *
+     * @param string $uuid
+     * @return bool
      */
-    public function deleteTask(int $id)
+    public function deleteTaskByUuid(string $uuid): bool
     {
-        return $this->model->find($id)->delete();
+        return $this->model->where('uuid', $uuid)->delete();
     }
 
     /**
-     * Summary of updateTaskStatus
+     * Update task status by UUID.
+     *
+     * @param string $uuid
+     * @param string $status
+     * @return bool
      */
-    public function updateTaskStatus(int $id, string $status)
+    public function updateTaskStatusByUuid(string $uuid, string $status): bool
     {
-        return $this->model->find($id)->update(['status' => $status]);
+        return $this->model->where('uuid', $uuid)->update(['status' => $status]);
     }
-
-
-
-
-
 }

@@ -1,31 +1,34 @@
 <?php
+
 namespace App\Services;
 
 use App\Interfaces\UserTaskInterface;
 
-
 class UserTaskServices
 {
-    protected $userTaskInterface;
+    protected UserTaskInterface $userTaskInterface;
 
     public function __construct(UserTaskInterface $userTaskInterface)
     {
         $this->userTaskInterface = $userTaskInterface;
     }
 
-
-
     /**
-     * Summary of createTask
+     * Create a new task.
+     *
+     * @param array $data
+     * @return mixed
      */
     public function createTask(array $data)
     {
-
         return $this->userTaskInterface->createTask($data);
     }
 
     /**
-     * Summary of getAllTasksByUserId
+     * Get all tasks by user ID.
+     *
+     * @param int $userId
+     * @return mixed
      */
     public function getAllTasksByUserId(int $userId)
     {
@@ -33,35 +36,48 @@ class UserTaskServices
     }
 
     /**
-     * Summary of findTaskByUuid
+     * Find a task by UUID.
+     *
+     * @param string $uuid
+     * @return mixed
      */
-    public function findTaskByUuid(string $id)
+    public function findTaskByUuid(string $uuid)
     {
-        return $this->userTaskInterface->findTaskByUuid($id);
+        return $this->userTaskInterface->findTaskByUuid($uuid);
     }
 
     /**
-     * Summary of updateTask
+     * Update a task by UUID.
+     *
+     * @param string $uuid
+     * @param array $data
+     * @return mixed
      */
-    public function updateTask(string $id, array $data)
+    public function updateTask(string $uuid, array $data)
     {
-        return $this->userTaskInterface->updateTask($id, $data);
+        return $this->userTaskInterface->updateTaskByUuid($uuid, $data);
     }
 
     /**
-     * Summary of deleteTask
+     * Delete a task by UUID.
+     *
+     * @param string $uuid
+     * @return mixed
      */
-    public function deleteTask(int $id)
+    public function deleteTask(string $uuid)
     {
-        return $this->userTaskInterface->deleteTask($id);
+        return $this->userTaskInterface->deleteTaskByUuid($uuid);
     }
 
     /**
-     * Summary of updateTaskStatus
+     * Update task status by UUID.
+     *
+     * @param string $uuid
+     * @param string $status
+     * @return mixed
      */
-    public function updateTaskStatus(int $id, string $status)
+    public function updateTaskStatus(string $uuid, string $status)
     {
-        return $this->userTaskInterface->updateTaskStatus($id, $status);
+        return $this->userTaskInterface->updateTaskStatusByUuid($uuid, $status);
     }
-
 }

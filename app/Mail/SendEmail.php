@@ -9,12 +9,27 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * Summary of SendEmail
+ */
 class SendEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    /**
+     * Summary of view
+     * @var
+     */
     public $view;
+    /**
+     * Summary of subject
+     * @var
+     */
     public $subject;
+    /**
+     * Summary of data
+     * @var
+     */
     public $data;
     /**
      * Create a new message instance.

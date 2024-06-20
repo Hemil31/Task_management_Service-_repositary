@@ -1,6 +1,9 @@
 <?php
 namespace App\Interfaces;
 
+/**
+ * Summary of UserInterface
+ */
 interface UserInterface
 {
     /**
@@ -11,16 +14,21 @@ interface UserInterface
     /**
      * Summary of deleteUserAccount
      */
-    public function deleteUserAccount($id);
+    public function deleteUserAccount(int $id);
 
     /**
      * Summary of getUser
      */
-    public function getUser($id);
+    public function getUser(int $id);
 
     /**
      * Summary of imageUpload
      */
-    public function imgUpload($image , $id);
+    public function imgUpload(string $image ,int $id);
+
+    /**
+     * Summary of getOldImageFileName
+     */
+    public function getOldImageFileName(int $id);
 
 }

@@ -1,6 +1,9 @@
 <?php
 namespace App\Interfaces;
 
+/**
+ * Summary of EmailInterfaceSend
+ */
 interface EmailInterfaceSend
 {
     /**

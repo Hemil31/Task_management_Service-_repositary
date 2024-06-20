@@ -78,9 +78,11 @@
                                         <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item"
-                                            onclick="return confirm('Are you sure you want to delete account this item?');"
-                                            href="{{ route('account.delete') }}">Delete</a>
+                                        <form id="deleteForm" action="{{ route('account.delete') }}" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="dropdown-item" style="background: none; border: none; cursor: pointer;">Delete</button>
+                                        </form>
                                     </li>
                                 </ul>
                             </div>

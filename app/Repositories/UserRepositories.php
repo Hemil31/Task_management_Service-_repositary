@@ -1,15 +1,13 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Interfaces\UserInterface;
 use App\Models\User;
-use App\Repositories\BaseRepositories;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class UserRepositories extends BaseRepositories implements UserInterface
+class UserRepositories  extends BaseRepositories implements UserInterface
 {
-
-    protected $user;
+    protected User $user;
 
     public function __construct(User $user)
     {
@@ -17,35 +15,63 @@ class UserRepositories extends BaseRepositories implements UserInterface
     }
 
     /**
-     * Summary of createUser
+     * Create a new user.
+     *
+     * @param array $data
+     * @return User
      */
-    public function createUser(array $data)
+    public function createUser(array $data): User
     {
         return $this->user->create($data);
     }
 
     /**
-     * Summary of deleteUserAccount
+     * Delete a user account by ID.
+     *
+     * @param int $id
+     * @return bool
      */
-    public function deleteUserAccount($id)
+    public function deleteUserAccount(int $id): bool
     {
-        return $this->user->find($id)->delete();
+        $user = $this->user->findOrFail($id);
+        return $user->delete();
     }
 
     /**
-     * Summary of getUser
+     * Get a user by ID.
+     *
+     * @param int $id
+     * @return User|null
      */
-    public function getUser($id){
+    public function getUser(int $id): ?User
+    {
         return $this->user->find($id);
     }
 
     /**
-     * Summary of imageUpload
+     * Upload a user image by ID.
+     *
+     * @param string $image
+     * @param int $id
+     * @return User
      */
-    public function imgUpload($image, $id){
-        $user = $this->user->find($id);
+    public function imgUpload(string $image, int $id): User
+    {
+        $user = $this->user->findOrFail($id);
         $user->image = $image;
         $user->save();
         return $user;
+    }
+
+    /**
+     * Get the old image file name by ID.
+     *
+     * @param int $id
+     * @return string
+     */
+    public function getOldImageFileName(int $id): string
+    {
+        $user = $this->user->findOrFail($id);
+        return $user->image;
     }
 }

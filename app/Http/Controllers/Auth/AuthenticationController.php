@@ -11,11 +11,27 @@ use App\Services\UserServices;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
+/**
+ * Summary of AuthenticationController
+ */
 class AuthenticationController extends Controller
 {
+    /**
+     * Summary of userServices
+     * @var
+     */
     protected $userServices;
+    /**
+     * Summary of emailService
+     * @var
+     */
     protected $emailService;
 
+    /**
+     * Summary of __construct
+     * @param \App\Services\UserServices $userServices
+     * @param \App\Interfaces\EmailInterfaceSend $emailService
+     */
     public function __construct(UserServices $userServices, EmailInterfaceSend $emailService)
     {
         $this->userServices = $userServices;
@@ -23,9 +39,9 @@ class AuthenticationController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display  of the Login view.
      */
-    public function userLoginView(): object
+    public function userLoginView()
     {
         return view('login');
     }
@@ -33,7 +49,7 @@ class AuthenticationController extends Controller
      * Handle the authentication process.
      * @param  LoginRequest  $request
      */
-    public function userLogin(LoginRequest $request): object
+    public function userLogin(LoginRequest $request)
     {
         $credentials = $request->validated();
         try {
@@ -49,7 +65,7 @@ class AuthenticationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): object
+    public function create()
     {
         return view('register');
     }
@@ -101,7 +117,7 @@ class AuthenticationController extends Controller
     /**
      * Display the user profile.
      */
-    public function userProfile(): object
+    public function userProfile()
     {
         try {
             $user = $this->userServices->getUser(auth()->id());

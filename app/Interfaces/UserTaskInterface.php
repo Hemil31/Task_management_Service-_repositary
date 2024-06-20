@@ -1,6 +1,9 @@
 <?php
 namespace App\Interfaces;
 
+/**
+ * Summary of UserTaskInterface
+ */
 interface UserTaskInterface
 {
     /**
@@ -16,21 +19,20 @@ interface UserTaskInterface
     /**
      * Summary of updateTask
      */
-    public function updateTask(string $id, array $data);
+    public function updateTaskByUuid(string $uuid, array $data);
 
     /**
      * Summary of deleteTask
      */
-    public function deleteTask(int $id);
+    public function deleteTaskByUuid(string $uuid);
 
     /**
      * Summary of updateTaskStatus
      */
-    public function updateTaskStatus(int $id, string $status);
+    public function updateTaskStatusByUuid(string $uuid,string $status);
 
     /**
      * Summary of findTaskByUuid
      */
     public function findTaskByUuid(string $id);
-
 }

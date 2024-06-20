@@ -1,9 +1,12 @@
 <?php
 namespace App\Repositories;
-use App\Interfaces\EmailInterface;
 use App\Interfaces\EmailInterfaceSend;
 use App\Mail\SendEmail;
 use Mail;
+
+/**
+ * Summary of EmailRepositoriesSend
+ */
 class EmailRepositoriesSend implements EmailInterfaceSend
 {
 

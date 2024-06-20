@@ -1,14 +1,15 @@
 <?php
+
 namespace App\Services;
 
 use App\Interfaces\UserInterface;
 use Auth;
 use Session;
+use Illuminate\Support\Facades\Storage;
 
 class UserServices
 {
-
-    protected $userInterface;
+    protected UserInterface $userInterface;
 
     public function __construct(UserInterface $userInterface)
     {
@@ -16,18 +17,23 @@ class UserServices
     }
 
     /**
-     * Summary of getAllUsers
+     * Create a new user.
+     *
+     * @param array $data
+     * @return mixed
      */
     public function createUser(array $data)
     {
-
         return $this->userInterface->createUser($data);
     }
 
     /**
-     * Summary of getAllUsers
+     * Authenticate a user.
+     *
+     * @param array $credentials
+     * @return bool
      */
-    public function authenticate(array $credentials)
+    public function authenticate(array $credentials): bool
     {
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
@@ -37,42 +43,62 @@ class UserServices
         return false;
     }
 
-
     /**
-     * Summary of logout
+     * Logout the currently authenticated user.
+     *
+     * @return void
      */
-    public function logout()
+    public function logout(): void
     {
         Auth::logout();
         Session::forget('user_name');
     }
 
-
     /**
-     * Summary of getAllUsers
+     * Delete a user account by ID.
+     *
+     * @param int $id
+     * @return void
      */
-    public function deleteUserAccount($id)
+    public function deleteUserAccount(int $id): void
     {
         $this->userInterface->deleteUserAccount($id);
     }
 
     /**
-     * Summary of getAllUsers
+     * Get a user by ID.
+     *
+     * @param int $id
+     * @return mixed
      */
-    public function getUser($id)
+    public function getUser(int $id)
     {
         return $this->userInterface->getUser($id);
     }
 
     /**
-     * Summary of imgUpload
+     * Upload a user image by ID.
+     *
+     * @param mixed $image
+     * @param int $id
+     * @return mixed
      */
     public function userImgUpload($image, $id)
     {
         $fileNameToStore = 'logo_' . time() . '.' . $image->getClientOriginalExtension();
-        $image->storeAs('public/logo', $fileNameToStore);
-        $image = $fileNameToStore;
-        return $this->userInterface->imgUpload($image, $id);
+        $path = $image->storeAs('public/logo', $fileNameToStore);
+        if (!$path) {
+            return false;
+        }
+        $oldFileName = $this->userInterface->getOldImageFileName($id);
+        $updateResult = $this->userInterface->imgUpload($fileNameToStore, $id);
+        if ($updateResult) {
+            if ($oldFileName) {
+                Storage::delete('public/logo/' . $oldFileName);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
-
 }
