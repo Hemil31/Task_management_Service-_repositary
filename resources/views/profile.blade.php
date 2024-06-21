@@ -16,6 +16,7 @@
                                 <div class="profile-image-container">
                                     <form action="{{ route('imgupload') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
+                                        @method('PUT')
                                         <div class="position-relative d-inline-block">
                                             <input type="file" name="profile_image" id="profileImageUpload"
                                                 class="form-control d-none" accept="image/*"

@@ -5,10 +5,21 @@ namespace App\Repositories;
 use App\Interfaces\UserInterface;
 use App\Models\User;
 
+/**
+ * Summary of UserRepositories
+ */
 class UserRepositories  extends BaseRepositories implements UserInterface
 {
+    /**
+     * Summary of user
+     * @var User
+     */
     protected User $user;
 
+    /**
+     * Summary of __construct
+     * @param \App\Models\User $user
+     */
     public function __construct(User $user)
     {
         $this->user = $user;
@@ -33,8 +44,7 @@ class UserRepositories  extends BaseRepositories implements UserInterface
      */
     public function deleteUserAccount(int $id): bool
     {
-        $user = $this->user->findOrFail($id);
-        return $user->delete();
+        return $this->user->findOrFail($id)->delete();
     }
 
     /**
@@ -67,11 +77,9 @@ class UserRepositories  extends BaseRepositories implements UserInterface
      * Get the old image file name by ID.
      *
      * @param int $id
-     * @return string
      */
-    public function getOldImageFileName(int $id): string
+    public function getOldImageFileName(int $id)
     {
-        $user = $this->user->findOrFail($id);
-        return $user->image;
+        return $this->user->findOrFail($id)->image;
     }
 }

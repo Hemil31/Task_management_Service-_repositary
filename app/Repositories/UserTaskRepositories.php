@@ -15,7 +15,7 @@ class UserTaskRepositories extends BaseRepositories implements UserTaskInterface
      * Summary of model
      * @var
      */
-    protected  $model;
+    protected $model;
 
     /**
      * Summary of __construct
@@ -52,11 +52,10 @@ class UserTaskRepositories extends BaseRepositories implements UserTaskInterface
      * Find a task by UUID.
      *
      * @param string $uuid
-     * @return UserTaskList
      */
-    public function findTaskByUuid(string $uuid): UserTaskList
+    public function findTaskByUuid(string $uuid)
     {
-        return $this->model->where('uuid', $uuid)->firstOrFail();
+        return $this->findByUuid($uuid);
     }
 
     /**
@@ -68,7 +67,7 @@ class UserTaskRepositories extends BaseRepositories implements UserTaskInterface
      */
     public function updateTaskByUuid(string $uuid, array $data): bool
     {
-        return $this->model->where('uuid', $uuid)->update($data);
+        return $this->updateByUuid($data, $uuid);
     }
 
     /**
@@ -79,7 +78,7 @@ class UserTaskRepositories extends BaseRepositories implements UserTaskInterface
      */
     public function deleteTaskByUuid(string $uuid): bool
     {
-        return $this->model->where('uuid', $uuid)->delete();
+        return $this->deleteByUuid($uuid);
     }
 
     /**
@@ -91,6 +90,6 @@ class UserTaskRepositories extends BaseRepositories implements UserTaskInterface
      */
     public function updateTaskStatusByUuid(string $uuid, string $status): bool
     {
-        return $this->model->where('uuid', $uuid)->update(['status' => $status]);
+        return $this->updateByUuid(['status' => $status], $uuid);
     }
 }

@@ -33,6 +33,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/edit/{id}', [TaskManagementController::class, 'update'])->name('tasks.update');
     Route::put('/update/{id}', [TaskManagementController::class, 'updateTaskStatus'])->name('tasks.update-status');
     Route::get('/profile', [AuthenticationController::class, 'userProfile'])->name('profile');
-    Route::post('/imgupload', [AuthenticationController::class, 'uploadimg'])->name('imgupload');
+    Route::put('/imgupload', [AuthenticationController::class, 'uploadimg'])->name('imgupload');
 });
 

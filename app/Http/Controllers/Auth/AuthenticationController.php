@@ -130,7 +130,7 @@ class AuthenticationController extends Controller
     /**
      * Update the user profile.
      */
-    public function uploadimg(ImageRequest $request)
+    public function uploadimg(ImageRequest $request) : RedirectResponse
     {
         try {
             if ($request->hasFile('profile_image')) {
