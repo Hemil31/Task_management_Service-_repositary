@@ -28,8 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [TaskManagementController::class, 'index'])->name('home');
     Route::get('/add', [TaskManagementController::class, 'create'])->name('add');
     Route::post('/add', [TaskManagementController::class, 'store'])->name('add.insert');
-    Route::delete('/delete/{id}', [TaskManagementController::class, 'destroy'])->name('delete');
-    Route::get('/edit/{id}', [TaskManagementController::class, 'edit'])->name('edit');
+    Route::delete('/delete/{uuid}', [TaskManagementController::class, 'destroy'])->name('delete');
+    Route::get('/edit/{uuid}', [TaskManagementController::class, 'edit'])->name('edit');
     Route::put('/edit/{id}', [TaskManagementController::class, 'update'])->name('tasks.update');
     Route::put('/update/{id}', [TaskManagementController::class, 'updateTaskStatus'])->name('tasks.update-status');
     Route::get('/profile', [AuthenticationController::class, 'userProfile'])->name('profile');

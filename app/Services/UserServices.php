@@ -2,18 +2,18 @@
 
 namespace App\Services;
 
-use App\Interfaces\UserInterface;
+use App\Repositories\UserRepositories;
 use Auth;
 use Session;
 use Illuminate\Support\Facades\Storage;
 
 class UserServices
 {
-    protected UserInterface $userInterface;
+    protected $userRepositories;
 
-    public function __construct(UserInterface $userInterface)
+    public function __construct(UserRepositories $userRepositories)
     {
-        $this->userInterface = $userInterface;
+        $this->userRepositories = $userRepositories;
     }
 
     /**
@@ -24,9 +24,8 @@ class UserServices
      */
     public function createUser(array $data)
     {
-        return $this->userInterface->createUser($data);
+        return $this->userRepositories->create($data);
     }
-
     /**
      * Authenticate a user.
      *
@@ -37,7 +36,11 @@ class UserServices
     {
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            Session::put('user_name', $user->name);
+            Session::put('user_info', [
+                'name' => $user->name,
+                'uuid' => $user->uuid,
+                'id' => $user->id,
+            ]);
             return true;
         }
         return false;
@@ -58,11 +61,10 @@ class UserServices
      * Delete a user account by ID.
      *
      * @param int $id
-     * @return void
      */
-    public function deleteUserAccount(int $id): void
+    public function deleteUserAccount(string $uuid): bool
     {
-        $this->userInterface->deleteUserAccount($id);
+        return $this->userRepositories->deleteByUuid($uuid);
     }
 
     /**
@@ -71,9 +73,9 @@ class UserServices
      * @param int $id
      * @return mixed
      */
-    public function getUser(int $id)
+    public function getUser(string $uuid)
     {
-        return $this->userInterface->getUser($id);
+        return $this->userRepositories->findByUuid($uuid);
     }
 
     /**
@@ -83,15 +85,16 @@ class UserServices
      * @param int $id
      * @return mixed
      */
-    public function userImgUpload($image, $id)
+    public function userImgUpload($image, $uuid)
     {
         $fileNameToStore = 'logo_' . time() . '.' . $image->getClientOriginalExtension();
         $path = $image->storeAs('public/logo', $fileNameToStore);
         if (!$path) {
             return false;
         }
-        $oldFileName = $this->userInterface->getOldImageFileName($id);
-        $updateResult = $this->userInterface->imgUpload($fileNameToStore, $id);
+        $data = ['image' => $fileNameToStore];
+        $oldFileName = $this->userRepositories->findByUuid($uuid)->image;
+        $updateResult = $this->userRepositories->updateByUuid($data, $uuid);
         if ($updateResult) {
             if ($oldFileName) {
                 Storage::delete('public/logo/' . $oldFileName);

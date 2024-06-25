@@ -10,9 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropUnique(['email']);
-            $table->dropUnique(['phone']);
+        Schema::table('user_task_lists', function (Blueprint $table) {
+            // Drop existing enum column
+            $table->unsignedTinyInteger('status')->change()->default(0);
         });
     }
 
@@ -21,9 +21,10 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->unique('email');
-            $table->unique('phone');
+        Schema::table('user_task_lists', function (Blueprint $table) {
+            // Drop tinyint column
+            $table->unsignedTinyInteger('status')->change()->default(0);
+
         });
     }
 };

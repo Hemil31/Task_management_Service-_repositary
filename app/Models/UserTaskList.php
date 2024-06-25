@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,6 +34,7 @@ class UserTaskList extends BaseModel
      */
     protected $casts = [
         'due_date' => 'date',
+        'status' => Status::class,
     ];
 
     /**

@@ -1,10 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\DataTables\TasksDataTable;
 use App\Http\Requests\TaskCreateRequest;
 use App\Http\Requests\TaskUpdateRequest;
 use App\Services\UserTaskServices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 /**
  * Summary of TaskManagementController
@@ -29,11 +31,20 @@ class TaskManagementController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(TasksDataTable $dataTable)
     {
-        $userdata = $this->userTaskServices->getAllTasksByUserId(auth()->id());
-        return view('home', compact('userdata'));
+        try {
+            return $dataTable->render('home');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+
     }
+    // {
+
+    //     $userdata = $this->userTaskServices->getAllTasksByUserId(auth()->id());
+    //     return view('home', compact('userdata'));
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -52,7 +63,8 @@ class TaskManagementController extends Controller
     {
         $data = $request->validated();
         try {
-            $data['user_id'] = auth()->id();
+            $id = Session::get('user_info.id');
+            $data['user_id'] = $id;
             $this->userTaskServices->createTask($data);
             return redirect()->route('home')->with('success', 'Task created successfully');
 
@@ -83,7 +95,7 @@ class TaskManagementController extends Controller
     {
         $data = $request->validated();
         try {
-            $this->userTaskServices->updateTask($uuid, $data);
+            $this->userTaskServices->updateTask($data, $uuid);
             return redirect()->route('home')->with('success', 'Task updated successfully');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -111,9 +123,11 @@ class TaskManagementController extends Controller
      */
     public function updateTaskStatus(string $uuid, Request $request)
     {
-        $status = $request->status;
+        $data = [
+            'status' => $request->status
+        ];
         try {
-            $this->userTaskServices->updateTaskStatus($uuid, $status);
+            $this->userTaskServices->updateTask($data, $uuid);
             return redirect()->route('home')->with('success', 'Task status updated successfully');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

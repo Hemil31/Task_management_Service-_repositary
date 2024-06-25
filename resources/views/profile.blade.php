@@ -14,7 +14,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="profile-image-container">
-                                    <form action="{{ route('imgupload') }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('imgupload' ,['uuid' => $user->uuid] ) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <div class="position-relative d-inline-block">

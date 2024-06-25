@@ -106,7 +106,7 @@ class AuthenticationController extends Controller
     public function deleteAccount(Request $request): RedirectResponse
     {
         try {
-            $this->userServices->deleteUserAccount(auth()->id());
+            $this->userServices->deleteUserAccount($request->uuid);
             auth()->logout();
             return redirect()->route('login')->with('success', 'Your account has been deleted successfully.');
         } catch (\Exception $e) {
@@ -117,10 +117,10 @@ class AuthenticationController extends Controller
     /**
      * Display the user profile.
      */
-    public function userProfile()
+    public function userProfile(Request $request)
     {
         try {
-            $user = $this->userServices->getUser(auth()->id());
+            $user = $this->userServices->getUser($request->uuid);
             return view('profile', compact('user'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -130,14 +130,13 @@ class AuthenticationController extends Controller
     /**
      * Update the user profile.
      */
-    public function uploadimg(ImageRequest $request) : RedirectResponse
+    public function uploadimg(ImageRequest $request): RedirectResponse
     {
         try {
             if ($request->hasFile('profile_image')) {
                 $image = $request->file('profile_image');
-                $this->userServices->userImgUpload($image, auth()->id());
+                $this->userServices->userImgUpload($image, $request->uuid);
                 return redirect()->back()->with('success', 'Image uploaded successfully.');
-
             }
             return redirect()->back()->withErrors(['profile_image' => 'Please select an image to upload.']);
         } catch (\Exception $e) {

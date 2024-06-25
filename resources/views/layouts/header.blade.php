@@ -6,10 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body>
@@ -30,11 +39,15 @@
                     <i class="fas fa-bars"></i>
                 </button>
 
+
                 <!-- Collapsible wrapper -->
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left links -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         @if (auth()->check())
+                            @php
+                                $uuid = auth()->user()->uuid;
+                            @endphp
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('home') }}">Home</a>
                             </li>
@@ -50,19 +63,10 @@
                             </li>
                         @endif
                     </ul>
-                    <!-- Left links -->
-
-                    {{-- <!-- Search Form -->
-                             <form class="d-flex" action="" method="GET">
-                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
-                                <button class="btn btn-outline-success" type="submit">Search</button>
-                            </form> --}}
-                    <!-- End Search Form -->
-
-                    <!-- Right-aligned "Welcome User" section -->
                     @auth
                         <div class="ms-auto d-flex align-items-center">
-                            <span class="navbar-text me-3">Welcome, <strong>{{ session('user_name') }}</strong></span>
+                            <span class="navbar-text me-3">Welcome,
+                                <strong>{{ session('user_info')['name'] }}</strong></span>
                             <!-- Avatar Dropdown -->
                             <div class="dropdown">
                                 <a data-bs-toggle="dropdown" class="dropdown-toggle d-flex align-items-center hidden-arrow"
@@ -72,16 +76,20 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('profile') }}">My profile</a>
+                                        <a class="dropdown-item" href="{{ route('profile', ['uuid' => $uuid]) }}">My
+                                            profile</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                                     </li>
                                     <li>
-                                        <form id="deleteForm" action="{{ route('account.delete') }}" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
+                                        <form id="deleteForm" action="{{ route('account.delete', ['uuid' => $uuid]) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Are you sure you want to delete your account?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="dropdown-item" style="background: none; border: none; cursor: pointer;">Delete</button>
+                                            <button type="submit" class="dropdown-item"
+                                                style="background: none; border: none; cursor: pointer;">Delete</button>
                                         </form>
                                     </li>
                                 </ul>

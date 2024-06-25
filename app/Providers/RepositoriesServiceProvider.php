@@ -12,14 +12,6 @@ class RepositoriesServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(
-            'App\Interfaces\UserInterface',
-            'App\Repositories\UserRepositories'
-        );
-        $this->app->bind(
-            'App\Interfaces\UserTaskInterface',
-            'App\Repositories\UserTaskRepositories'
-        );
-        $this->app->bind(
             'App\Interfaces\EmailInterfaceSend',
             'App\Repositories\EmailRepositoriesSend'
         );

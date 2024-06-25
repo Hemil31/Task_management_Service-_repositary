@@ -16,8 +16,8 @@ class EmailRepositoriesSend implements EmailInterfaceSend
      * @param mixed $subject
      * @param mixed $data
      */
-    public function sendEmail($view, $subject, $data)
+    public function sendEmail($view, $subject, $data) : bool
     {
-        Mail::to($data['email'])->queue(new SendEmail($view, $subject, $data));
+        return Mail::to($data['email'])->queue(new SendEmail($view, $subject, $data));
     }
 }
