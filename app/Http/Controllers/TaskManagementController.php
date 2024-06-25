@@ -40,12 +40,6 @@ class TaskManagementController extends Controller
         }
 
     }
-    // {
-
-    //     $userdata = $this->userTaskServices->getAllTasksByUserId(auth()->id());
-    //     return view('home', compact('userdata'));
-    // }
-
     /**
      * Show the form for creating a new resource.
      *
